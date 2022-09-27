@@ -1,0 +1,22 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "Learning Node express and mongodb",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://khatanark: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@github.com/khatanark/LearningNodeJS.git"
+  },
+  "author": "Rohit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khatanark/LearningNodeJS/issues"
+  },
+  "homepage": "https://github.com/khatanark/LearningNodeJS#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
