@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const { ppid } = require('process');
 const app = express();
 // middleware express.json()  It helps to modify the incoming data
 app.use(express.json()); 
@@ -78,6 +79,15 @@ app.get('/api/v1/tours/:id', (req, res) => {
         }
     })
 })
+
+
+// Difference between Patch and Puts (Puts update all the data of the form where as patch is used to update only particular fields.)
+app.patch('/api/v1/tours/:id', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Tour updated'
+    })
+} );
 
 app.listen(port, () => {
     console.log('App running')
