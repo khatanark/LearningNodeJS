@@ -57,6 +57,28 @@ app.post('/api/v1/tours', (req, res) => {
 } );
 
 
+//Get a particular post.
+// if we hit /tours/5 => output =>{ id: '5' }
+app.get('/api/v1/tours/:id', (req, res) => {
+    console.log(req.params)
+    const id = req.params.id * 1; //Coverting into number js trick
+
+    if(id > tours.length){
+        return res.json({
+            status: 'success',
+            message: 'No tour for this particular id'
+        })
+    }  // if no tour.
+
+    const tour = tours.find(el => el.id === id) //this is js function.
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour
+        }
+    })
+})
+
 app.listen(port, () => {
     console.log('App running')
 });
