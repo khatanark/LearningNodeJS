@@ -1,39 +1,14 @@
 const express = require('express')
-
-const getAllUsers = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
-const getAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
-const updateAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
-const deleteAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
-
+const userController = require('./../controllers/userController')
 const router = express.Router()
 
 router
 .route('/')
-.get(getAllUsers)
+.get(userController.getAllUsers)
 router
 .route('/:id')
-.get(getAUser)
-.patch(updateAUser)
-.delete(deleteAUser)
+.get(userController.getAUser)
+.patch(userController.updateAUser)
+.delete(userController.deleteAUser)
 
 module.exports = router
