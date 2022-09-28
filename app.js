@@ -10,36 +10,17 @@ const port = 3000;
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
-// It works for get only
-app.get('/', (req, res) => {
-    res.status(200).send('Hello From the Server Side.')
-});
-
-// It works for post only
-app.post('/', (req, res) => {
-    res.status(200).send('Hello From the Server Side. POst request')
-});
-
-// How to send json
-app.get('/json', (req, res) => {
-    res.status(200).json({title: 'Hello'})
-});
-
-
-// This is the format we will send as it will be easy for the client to understand. 
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
     res.status(200).json({
         status: 'success',
         results: tours.length,
         data: {
             tours
         }
-    })
-} )
+    });
+} 
 
-//In Post request we can send data from client to server.This data ideal should be available on requets but nodesjs doesn't include on req
-// So will be using middlewares for that.SO in this case we will be using simple middleware express.json() on top. app.use(express.json());
-app.post('/api/v1/tours', (req, res) => {
+const addATour =  (req, res) => {
     const newId = tours[tours.length-1].id + 1;
     const newTour = Object.assign({id: newId}, req.body);
     tours.push(newTour);
@@ -55,12 +36,9 @@ app.post('/api/v1/tours', (req, res) => {
         )
     });
     console.log(req.body);
-} );
+}
 
-
-//Get a particular post.
-// if we hit /tours/5 => output =>{ id: '5' }
-app.get('/api/v1/tours/:id', (req, res) => {
+const getATour = (req, res) => {
     console.log(req.params)
     const id = req.params.id * 1; //Coverting into number js trick
 
@@ -78,24 +56,28 @@ app.get('/api/v1/tours/:id', (req, res) => {
             tour
         }
     })
-})
+}
 
-
-// Difference between Patch and Puts (Puts update all the data of the form where as patch is used to update only particular fields.)
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateApost = (req, res) => {
     res.status(200).json({
         status: 'success',
         message: 'Tour updated'
     })
-} );
+} 
 
-
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteAPost = (req, res) => {
     res.status(200).json({
         status: 'success',
         message: 'Tour Deleted'
     })
-} );
+} 
+
+// This is the format we will send as it will be easy for the client to understand. 
+app.get('/api/v1/tours', getAllTours);
+app.post('/api/v1/tours', addATour);
+app.get('/api/v1/tours/:id', getATour);
+app.patch('/api/v1/tours/:id', updateApost);
+app.delete('/api/v1/tours/:id', deleteAPost);
 
 app.listen(port, () => {
     console.log('App running')
