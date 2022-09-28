@@ -73,11 +73,16 @@ const deleteAPost = (req, res) => {
 } 
 
 // This is the format we will send as it will be easy for the client to understand. 
-app.get('/api/v1/tours', getAllTours);
-app.post('/api/v1/tours', addATour);
-app.get('/api/v1/tours/:id', getATour);
-app.patch('/api/v1/tours/:id', updateApost);
-app.delete('/api/v1/tours/:id', deleteAPost);
+// app.get('/api/v1/tours', getAllTours);
+// app.post('/api/v1/tours', addATour);
+// app.get('/api/v1/tours/:id', getATour);
+// app.patch('/api/v1/tours/:id', updateApost);
+// app.delete('/api/v1/tours/:id', deleteAPost);
+
+
+// /api/v1/tours is common in first 2 request so we cant modifiy something like that.
+app.route('/api/v1/tours').get(getAllTours).post(addATour)
+app.route('/api/v1/tours/:id').get(getATour).patch(updateApost).delete(deleteAPost)
 
 app.listen(port, () => {
     console.log('App running')
