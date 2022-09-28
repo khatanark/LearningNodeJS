@@ -32,10 +32,4 @@ const port = 3000;
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
-
-// 4) SERVER
-app.listen(port, () => {
-    console.log('App running')
-});
-// We have passed the callback function to the listen func.
-// Note => Inside callbacks contains non-blocking code.?
+module.exports = app
