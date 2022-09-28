@@ -6,7 +6,7 @@ const app = express();
 // middleware express.json()  It helps to modify the incoming data
 
 // 1) MIDDLEWARES 
-app.use(morgan('dev'))
+app.use(morgan('dev'))  
 app.use(express.json()); 
 
 // This is a custom middleware. 
@@ -84,6 +84,31 @@ const deleteAPost = (req, res) => {
     })
 } 
 
+const getAllUsers = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'All users'
+    });
+} 
+const getAUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'All users'
+    });
+} 
+const updateAUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'All users'
+    });
+} 
+const deleteAUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'All users'
+    });
+} 
+
 // This is the format we will send as it will be easy for the client to understand. 
 // app.get('/api/v1/tours', getAllTours);
 // app.post('/api/v1/tours', addATour);
@@ -95,6 +120,9 @@ const deleteAPost = (req, res) => {
 // /api/v1/tours is common in first 2 request so we cant modifiy something like that.
 app.route('/api/v1/tours').get(getAllTours).post(addATour)
 app.route('/api/v1/tours/:id').get(getATour).patch(updateApost).delete(deleteAPost)
+
+app.route('/api/v1/users').get(getAllUsers)
+app.route('/api/v1/users/:id').get(getAUser).patch(updateAUser).delete(deleteAUser)
 
 
 // 4) SERVER
