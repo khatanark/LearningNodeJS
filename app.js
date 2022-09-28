@@ -4,6 +4,12 @@ const { ppid } = require('process');
 const app = express();
 // middleware express.json()  It helps to modify the incoming data
 app.use(express.json()); 
+
+// This is a custom middleware. 
+app.use((req, res, next) => {
+    console.log("Hello")
+    next()
+})
 const port = 3000;
 
 // Note => Top level code is executed only once when application is started.
