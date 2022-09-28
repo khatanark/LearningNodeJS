@@ -1,8 +1,12 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan'); // Logging middleware . 3rd party middleware.
 const { ppid } = require('process');
 const app = express();
 // middleware express.json()  It helps to modify the incoming data
+
+// 1) MIDDLEWARES 
+app.use(morgan('dev'))
 app.use(express.json()); 
 
 // This is a custom middleware. 
@@ -16,6 +20,8 @@ const port = 3000;
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
+
+//  2) ROUTE HANDLERS
 const getAllTours = (req, res) => {
     res.status(200).json({
         status: 'success',
@@ -85,11 +91,13 @@ const deleteAPost = (req, res) => {
 // app.patch('/api/v1/tours/:id', updateApost);
 // app.delete('/api/v1/tours/:id', deleteAPost);
 
-
+// 3) ROUTES
 // /api/v1/tours is common in first 2 request so we cant modifiy something like that.
 app.route('/api/v1/tours').get(getAllTours).post(addATour)
 app.route('/api/v1/tours/:id').get(getATour).patch(updateApost).delete(deleteAPost)
 
+
+// 4) SERVER
 app.listen(port, () => {
     console.log('App running')
 });
