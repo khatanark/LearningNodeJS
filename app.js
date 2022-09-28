@@ -117,12 +117,32 @@ const deleteAUser = (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteAPost);
 
 // 3) ROUTES
-// /api/v1/tours is common in first 2 request so we cant modifiy something like that.
-app.route('/api/v1/tours').get(getAllTours).post(addATour)
-app.route('/api/v1/tours/:id').get(getATour).patch(updateApost).delete(deleteAPost)
+// We will be using router middle ware.
+const tourRouter = express.Router()
+const userRouter = express.Router()
 
-app.route('/api/v1/users').get(getAllUsers)
-app.route('/api/v1/users/:id').get(getAUser).patch(updateAUser).delete(deleteAUser)
+tourRouter
+.route('/')
+.get(getAllTours)
+.post(addATour)
+tourRouter
+.route('/:id')
+.get(getATour)
+.patch(updateApost)
+.delete(deleteAPost)
+
+userRouter
+.route('/')
+.get(getAllUsers)
+userRouter
+.route('/:id')
+.get(getAUser)
+.patch(updateAUser)
+.delete(deleteAUser)
+
+// These are middleWares
+app.use('/api/v1/tours', tourRouter)
+app.use('/api/v1/users', userRouter)
 
 
 // 4) SERVER
