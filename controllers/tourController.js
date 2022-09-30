@@ -1,10 +1,21 @@
 const Tour = require('./../models/tourModel')
 
-exports.getAllTours = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-    });
-} 
+exports.getAllTours = async (req, res) => {
+    try{
+        const tours = await Tour.find() 
+        res.status(201).json({
+            status: 'Success', 
+            data: {
+                tour: tours
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 'Failed',
+            message: 'Invalid data sent!'
+        })
+    }
+};
 
 exports.addATour =  async (req, res) => {
     //Important => Tour.create method will return a promise. We will wait for that promise using async await.And using Async wait we need to test for error using try catch
@@ -25,8 +36,22 @@ exports.addATour =  async (req, res) => {
     }
 };
 
-exports.getATour = (req, res) => {
-
+exports.getATour = async (req, res) => {
+    try{
+        // params.id because in routes we are using /:id
+        const tour = await Tour.findById(req.params.id);
+        res.status(201).json({
+            status: 'Success', 
+            data: {
+                tour: tour
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 'Failed', 
+            message: 'Invalid Data'
+        })
+    }
 }
 
 exports.updateApost = (req, res) => {
