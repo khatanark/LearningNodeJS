@@ -6,6 +6,7 @@ const app = require('./app');
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
 
+// Connected the DATABASE
 mongoose.connect(DB, {
     useNewUrlParser: true, 
     useCreateIndex: true,
@@ -15,25 +16,6 @@ mongoose.connect(DB, {
     console.log('DB connection is succesfull.');
 }
 )
-
-
-const tourSchema = new mongoose.Schema(
-    {
-        name: {
-        type: String, 
-        required: [true, 'A tour must have a name'] // this is a error msg.
-        },
-        rating: {type: Number, 
-            default: 4
-        }
-       ,
-        prince: {
-            type: Number, 
-            required: [true, 'A tour must have a price']
-        }
-    }
-);
-const Tour = mongoose.model('Tour', tourSchema)
 
 const port = process.env.PORT || 3000
 console.log(process.env)
