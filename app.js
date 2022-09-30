@@ -1,9 +1,9 @@
 const fs = require('fs');
 const express = require('express');
 
-if (process.env.NODE_ENV === 'developement'){
-    app.use(morgan('dev'))
-}
+// if (process.env.NODE_ENV === 'developement'){
+//     app.use(morgan('dev'))
+// }
 const morgan = require('morgan'); // Logging middleware . 3rd party middleware.
 const tourRouter = require('./routes/tourRoutes')
 const userRouter = require('./routes/userRoutes')
