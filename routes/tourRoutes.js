@@ -12,7 +12,7 @@ const router = express.Router()
 router
 .route('/')
 .get(tourController.getAllTours)
-.post(tourController.checkBody, tourController.addATour) // Chaining a param middleware. 
+.post(tourController.addATour) // Chaining a param middleware. 
 
 router
 .route('/:id')

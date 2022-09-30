@@ -1,17 +1,4 @@
 const Tour = require('./../models/tourModel')
- 
-exports.checkBody = (req, res, next, val ) => {
-    console.log('I am in the middleware')
-    if(!req.body.name || !req.body.price) {
-        return res.status(400).json(
-            {
-                status: 'Failed',
-                messgae: 'Missing Price or Name'
-            }
-        )
-    }
-    next();
-}
 
 exports.getAllTours = (req, res) => {
     res.status(200).json({
@@ -19,9 +6,24 @@ exports.getAllTours = (req, res) => {
     });
 } 
 
-exports.addATour =  (req, res) => {
+exports.addATour =  async (req, res) => {
+    //Important => Tour.create method will return a promise. We will wait for that promise using async await.And using Async wait we need to test for error using try catch
+    try{
+    const newTour = await Tour.create(req.body);
+    res.status(201).json({
+        status: 'Success', 
+        data: {
+            tour: newTour
+        }
+    });
     console.log(req.body);
-}
+    } catch (err) {
+        res.status(400).json({
+            status: 'Failed',
+            message: 'Invalid data sent!'
+        })
+    }
+};
 
 exports.getATour = (req, res) => {
 

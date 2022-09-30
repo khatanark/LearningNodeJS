@@ -20,3 +20,4 @@ const tourSchema = new mongoose.Schema(
 const Tour = mongoose.model('Tour', tourSchema)
 module.exports = Tour;
 // Where do we need this, we need this we we write update delete , i.e in tour controller.
+// Business Logic must be here.And application code. 
