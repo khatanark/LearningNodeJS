@@ -17,6 +17,23 @@ mongoose.connect(DB, {
 )
 
 
+const tourSchema = new mongoose.Schema(
+    {
+        name: {
+        type: String, 
+        required: [true, 'A tour must have a name'] // this is a error msg.
+        },
+        rating: {type: Number, 
+            default: 4
+        }
+       ,
+        prince: {
+            type: Number, 
+            required: [true, 'A tour must have a price']
+        }
+    }
+);
+const Tour = mongoose.model('Tour', tourSchema)
 
 const port = process.env.PORT || 3000
 console.log(process.env)
