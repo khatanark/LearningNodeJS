@@ -18,6 +18,6 @@ router
 .route('/:id')
 .get(tourController.getATour)
 .patch(tourController.updateApost)
-.delete(tourController.deleteAPost)
+.delete(tourController.deleteATour)
 
 module.exports = router;
