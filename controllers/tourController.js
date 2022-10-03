@@ -2,19 +2,29 @@ const Tour = require('./../models/tourModel')
 
 exports.getAllTours = async (req, res) => {
     try{
+        console.log(req.query) 
         //http://localhost:3000/api/v1/tours?duration=5&difficulty=easy Express takes cares of query filtering.
         // console.log(req.query)
         // const tours = await Tour.find(req.query) this query will give the results of tours which have duration 5 and difficulty easy.
 
         // We will create a shallow object to store the query . 
-        // BUILD THE QUERY
+        // BUILD THE QUERY (Filtering )
         const queryObj = {...req.query}; // this creates the new object instead of referece. 
         const excludeFields = ['page', 'sort', 'limit', 'fields']
         excludeFields.forEach(el => delete queryObj[el]) // we delete these query fields from query objects  http://localhost:3000/api/v1/tours?duration=5&difficulty=easy&sort=1&limit=10
-        console.log(queryObj, req.query)
 
-        const query = Tour.find(queryObj);
+        // 2) Advance Filtering.
+        let queryString = JSON.stringify(queryObj);
+        queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        console.log(JSON.parse(queryString));
 
+
+
+
+        const query = Tour.find(JSON.parse(queryString));
+        // {difficulty: 'easy', duration: { $gte: 5}} this is the way to use operator $greater than equal.
+        // {difficulty: 'easy', duration: { gte: '5' } } // http://localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&sort=1&limit=10 , this is the api we sent from there . Difference so we need to replace gte to $gte. 
+        // gte, gt, lte, lt
 
         // Execute the query
         const tours = await query; // we have changed await from this await Tour.find(req.query) , so that we can apply other operations on query.
@@ -29,7 +39,7 @@ exports.getAllTours = async (req, res) => {
     } catch (err) {
         res.status(400).json({
             status: 'Failed',
-            message: 'Invalid data sent!'
+            message: err
         })
     }
 };
