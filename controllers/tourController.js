@@ -2,7 +2,10 @@ const Tour = require('./../models/tourModel')
 
 exports.getAllTours = async (req, res) => {
     try{
-        const tours = await Tour.find() 
+        //http://localhost:3000/api/v1/tours?duration=5&difficulty=easy Express takes cares of query filtering.
+        // console.log(req.query)
+        // const tours = await Tour.find(req.query) this query will give the results of tours which have duration 5 and difficulty easy.
+        const tours = await Tour.find()
         res.status(201).json({
             status: 'Success', 
             data: {
