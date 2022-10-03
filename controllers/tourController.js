@@ -8,12 +8,12 @@ exports.getAllTours = async (req, res) => {
         // const tours = await Tour.find(req.query) this query will give the results of tours which have duration 5 and difficulty easy.
 
         // We will create a shallow object to store the query . 
-        // BUILD THE QUERY (Filtering )
+        //1-A) BUILD THE QUERY (Filtering )
         const queryObj = {...req.query}; // this creates the new object instead of referece. 
         const excludeFields = ['page', 'sort', 'limit', 'fields']
         excludeFields.forEach(el => delete queryObj[el]) // we delete these query fields from query objects  http://localhost:3000/api/v1/tours?duration=5&difficulty=easy&sort=1&limit=10
 
-        // 2) Advance Filtering.
+        //1-B) Advance Filtering.
         let queryString = JSON.stringify(queryObj);
         queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
         console.log(JSON.parse(queryString));
@@ -21,7 +21,16 @@ exports.getAllTours = async (req, res) => {
 
 
 
-        const query = Tour.find(JSON.parse(queryString));
+        let query = Tour.find(JSON.parse(queryString)); 
+        // 2) SORTING
+        if(req.query.sort){
+            // http://localhost:3000/api/v1/tours?sort=price
+            query = query.sort(req.query.sort)
+        } else {
+            query = query.sort('-createdAt'); // Default one.
+        }
+
+
         // {difficulty: 'easy', duration: { $gte: 5}} this is the way to use operator $greater than equal.
         // {difficulty: 'easy', duration: { gte: '5' } } // http://localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&sort=1&limit=10 , this is the api we sent from there . Difference so we need to replace gte to $gte. 
         // gte, gt, lte, lt
