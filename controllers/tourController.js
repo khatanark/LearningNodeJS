@@ -5,7 +5,21 @@ exports.getAllTours = async (req, res) => {
         //http://localhost:3000/api/v1/tours?duration=5&difficulty=easy Express takes cares of query filtering.
         // console.log(req.query)
         // const tours = await Tour.find(req.query) this query will give the results of tours which have duration 5 and difficulty easy.
-        const tours = await Tour.find()
+
+        // We will create a shallow object to store the query . 
+        // BUILD THE QUERY
+        const queryObj = {...req.query}; // this creates the new object instead of referece. 
+        const excludeFields = ['page', 'sort', 'limit', 'fields']
+        excludeFields.forEach(el => delete queryObj[el]) // we delete these query fields from query objects  http://localhost:3000/api/v1/tours?duration=5&difficulty=easy&sort=1&limit=10
+        console.log(queryObj, req.query)
+
+        const query = Tour.find(queryObj);
+
+
+        // Execute the query
+        const tours = await query; // we have changed await from this await Tour.find(req.query) , so that we can apply other operations on query.
+
+        // Send Response.
         res.status(201).json({
             status: 'Success', 
             data: {
