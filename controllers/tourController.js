@@ -30,6 +30,15 @@ exports.getAllTours = async (req, res) => {
             query = query.sort('-createdAt'); // Default one.
         }
 
+        // 3) Limiting.
+        if(req.query.fields){
+            // http://localhost:3000/api/v1/tours?fields=name,duration,difficulty,price
+            const fields = req.query.fields.split(',').join(' ');
+            query = query.select(fields);
+        } else {
+            query = query.select('-__v'); // Exclude only this field __v
+        }
+
 
         // {difficulty: 'easy', duration: { $gte: 5}} this is the way to use operator $greater than equal.
         // {difficulty: 'easy', duration: { gte: '5' } } // http://localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&sort=1&limit=10 , this is the api we sent from there . Difference so we need to replace gte to $gte. 
