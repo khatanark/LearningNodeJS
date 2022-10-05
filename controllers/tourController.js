@@ -1,5 +1,7 @@
 const Tour = require('./../models/tourModel')
 const APIFeatures = require('./../utils/apiFeatures');
+console.log(APIFeatures);
+
 exports.aliasTopTours = async(req, res, next) => {
     req.query.limit = 5;
     req.query.sort = '-ratingAverage,price';
@@ -9,12 +11,11 @@ exports.aliasTopTours = async(req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
     try{
-        console.log(req.query) 
         // Execute the query
         // Passing query object.
         // Chaining always work because we are return this after each function
         const features = new APIFeatures(Tour.find(), req.query)
-        .filter()
+        // .filter()
         .sort()
         .paginate()
         .limitFields();
