@@ -7,6 +7,7 @@ const router = express.Router()
 
 // Create check body middleware . check wheather input contains title and price or not.
 // if not send back status 400 bad request.
+router.route('/tour-stats').get(tourController.getTourStats)
 router.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.getAllTours) // tourController.aliasTopTours this is the middleware.
 
 router

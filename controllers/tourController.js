@@ -94,3 +94,41 @@ exports.deleteATour = async (req, res) => {
         })
     }
 }
+
+
+exports.getTourStats = async(req, res) => {
+    try {
+        // We will pass the stages in the aggregate, and we will use stages one by one.
+        const stats = await Tour.aggregate([
+            // Match stage , will match the tours whose ratings are gte 4.5
+            {
+                $match: {ratingsAverage: { $gte: 4.5}}
+            }, 
+            {
+                $group: {
+                    // What do we group by.
+                    _id: '$difficulty', 
+                    num: { $sum: 1}, // for each document, it will add one.
+                    avgRating: { $avg: '$ratingsAverage'},
+                    avgPrice: {$avg: '$price'}, 
+                    minPrice: {$min: '$price'},
+                    maxPrice: {$max: '$price'}
+                }
+            }
+        ])
+
+        res.status(201).json({
+            status: 'Success', 
+            data: {
+                stats
+            }
+        });
+    } catch (err) {
+        res.status(404).json(
+            {
+                status: 'Failed',
+                message: err
+            }
+        )
+    }
+}
