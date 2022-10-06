@@ -5,6 +5,8 @@ const express = require('express');
 //     app.use(morgan('dev'))
 // }
 const morgan = require('morgan'); // Logging middleware . 3rd party middleware.
+const AppError =  require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
 const tourRouter = require('./routes/tourRoutes')
 const userRouter = require('./routes/userRoutes')
 const app = express();
@@ -26,27 +28,11 @@ app.use('/api/v1/users', userRouter)
 // if we are here it means the request is not handled. the req cycele is not complete.
 // * means for all the verbs.
 app.all('*', (req, res, next) => {
-    const err = new Error(`Cant find ${req.originalUrl} on this Server!`)
-    err.status = 'error'
-    err.statusCode = 404;
-    next(err);
+    next(new AppError(`Cant find ${req.originalUrl} on this Server!`, 404));
     // Note if next gets argument then it will assume that it is err0r and it will skip all the middlewares and will go straight to last global one,
 })
 
-
-
-// GLOBAL MIDDLEWARES.
-
-// By specifing the 4 params , the express knows this is middleware func.
-app.use((err, req, res, next) => {
-    // How do we get to know status code of errr . We will read from err object.
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error' // if not defined will pick up the default one.
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-    });
-})
-
+//GLOBAL MIDDLEWARES.
+app.use(globalErrorHandler)
 
 module.exports = app
