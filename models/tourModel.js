@@ -54,7 +54,11 @@ const tourSchema = new mongoose.Schema(
             default: Date.now(), 
             select: false // It will never be shown to client. 
         }, 
-        startDates: [Date]
+        startDates: [Date], 
+        secretTour: {
+            type: Boolean,
+            default: false
+        }
     } , {
         // We are defing the options to the schema. that is wantto show the virtual fields.
         toJSON: {virtuals: true}, 
@@ -80,6 +84,14 @@ tourSchema.pre('save', function(next){
 //     console.log(doc)
 //     next()
 // })
+
+// QUERY MIDDLEWARES.
+tourSchema.pre('find', function(next){
+    // thhis will point to the current query.
+    this.find({ secretTour: { $ne: true}})
+    next();
+})
+
 
 const Tour = mongoose.model('Tour', tourSchema)
 module.exports = Tour;

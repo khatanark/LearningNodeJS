@@ -20,4 +20,15 @@ const port = 3000;
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
+// Order of middleware is important.
+// Handle unhandle routes. This is the point where we will be defining the routes.
+// if we are here it means the request is not handled.
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `Cant find ${req.originalUrl} on this Server!`
+    })
+})
+
+
 module.exports = app
