@@ -1,5 +1,6 @@
 const Tour = require('./../models/tourModel')
 const APIFeatures = require('./../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
 console.log(APIFeatures);
 
 exports.aliasTopTours = async(req, res, next) => {
@@ -9,8 +10,8 @@ exports.aliasTopTours = async(req, res, next) => {
     next();
 };
 
-exports.getAllTours = async (req, res) => {
-    try{
+exports.getAllTours = catchAsync(async (req, res, next) => {
+
         // Execute the query
         // Passing query object.
         // Chaining always work because we are return this after each function
@@ -28,17 +29,13 @@ exports.getAllTours = async (req, res) => {
                 tour: tours
             }
         });
-    } catch (err) {
-        res.status(400).json({
-            status: 'Failed',
-            message: err
-        })
-    }
-};
+});
 
-exports.addATour =  async (req, res) => {
+
+
+
+exports.addATour =  catchAsync(async (req, res, next) => {
     //Important => Tour.create method will return a promise. We will wait for that promise using async await.And using Async wait we need to test for error using try catch
-    try{
     const newTour = await Tour.create(req.body);
     res.status(201).json({
         status: 'Success', 
@@ -46,17 +43,9 @@ exports.addATour =  async (req, res) => {
             tour: newTour
         }
     });
-    console.log(req.body);
-    } catch (err) {
-        res.status(400).json({
-            status: 'Failed',
-            message: err
-        })
-    }
-};
+});
 
-exports.getATour = async (req, res) => {
-    try{
+exports.getATour = catchAsync(async (req, res, next) => {
         // params.id because in routes we are using /:id
         const tour = await Tour.findById(req.params.id);
         res.status(201).json({
@@ -65,13 +54,7 @@ exports.getATour = async (req, res) => {
                 tour: tour
             }
         });
-    } catch (err) {
-        res.status(400).json({
-            status: 'Failed', 
-            message: 'Invalid Data'
-        })
-    }
-}
+})
 
 exports.updateApost = (req, res) => {
     res.status(200).json({
@@ -80,24 +63,16 @@ exports.updateApost = (req, res) => {
     })
 } 
 
-exports.deleteATour = async (req, res) => {
-    try {
+exports.deleteATour = catchAsync(async (req, res, next) => {
         await Tour.findByIDAndDelete(req.params.id);
         res.status(200).json({
             status: 'success',
             message: 'Deleted successfully'
         })
-    } catch (err) {
-        res.status(401).json({
-            status: 'failed',
-            message: err
-        })
-    }
-}
+})
 
 
-exports.getTourStats = async(req, res) => {
-    try {
+exports.getTourStats = catchAsync(async(req, res, next) => {
         // We will pass the stages in the aggregate, and we will use stages one by one.
         const stats = await Tour.aggregate([
             // Match stage , will match the tours whose ratings are gte 4.5
@@ -123,12 +98,4 @@ exports.getTourStats = async(req, res) => {
                 stats
             }
         });
-    } catch (err) {
-        res.status(404).json(
-            {
-                status: 'Failed',
-                message: err
-            }
-        )
-    }
-}
+})
