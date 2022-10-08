@@ -28,7 +28,17 @@ const userSchema = new mongoose.Schema(
         }, 
         passwordConfirm: {
             type: String, 
-            required: [true, 'Please confirm the password.']
+            required: [true, 'Please confirm the password.'], 
+            validate: {
+                // We will define the callback function, which will be used on creation of document.
+                // We cant use the arrow func because we will use the this keyword.
+                validator: function(el) {
+                    // el is current element. 
+                    return el === this.password // abc === abc then it will pass true. and validation will be true.
+                    //VVVV IMP Note: This works on CREATE or ON SAVE.
+                }, 
+                message: "Passwords are not save."
+            }
         }
     }
 );
