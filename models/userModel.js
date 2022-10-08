@@ -4,6 +4,7 @@
 // Challenge. Create a schema with name, email, photo , password, passwordConfirm
 const mongoose = require('mongoose');
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
 
 
@@ -42,6 +43,18 @@ const userSchema = new mongoose.Schema(
         }
     }
 );
+
+// We will use pre save middleware to encrypt the password.
+// Pre save works between getting the data and saving it.
+userSchema.pre('save', async function(next){
+    // this refers to the current document.
+    // will check first that password field is modified or not in case of update , if modified that only middleware will work.
+    if(!this.isModified('password')) return next() // if not modified.
+    this.password = await bcrypt.hash(this.password, 12); // hash is a async func.
+    this.passwordConfirm = undefined; // delete the passwordconfirm the field.
+    next()
+})
+
 
 const User = mongoose.model('User', userSchema)
 module.exports = User;
