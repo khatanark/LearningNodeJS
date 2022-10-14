@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String, 
             required: [true,'A user must have a name.'],
-            minlength: 8
+            minlength: 8, 
+            select: false
         }, 
         passwordConfirm: {
             type: String, 
@@ -54,6 +55,12 @@ userSchema.pre('save', async function(next){
     this.passwordConfirm = undefined; // delete the passwordconfirm the field.
     next()
 })
+
+// We will use instance method which will be avilable throughout all the documents of the collections.It is define on userScehma. 
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword){
+    // this points to document. this.password is not available due to select false.
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 
 const User = mongoose.model('User', userSchema)
