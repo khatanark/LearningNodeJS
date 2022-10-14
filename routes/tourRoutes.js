@@ -1,5 +1,7 @@
 const express = require('express')
 const tourController = require('./../controllers/tourController')
+
+const authController = require('./../controllers/authController')
 const router = express.Router()
 
 // This is params middleware. It will be available for specific params , /api/tours/:id
@@ -12,7 +14,7 @@ router.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.ge
 
 router
 .route('/')
-.get(tourController.getAllTours)
+.get(authController.protect, tourController.getAllTours) // First wil run auth middleware then getalltours
 .post(tourController.addATour) // Chaining a param middleware. 
 
 router

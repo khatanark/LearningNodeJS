@@ -63,3 +63,20 @@ exports.login = catchAsync(async (req, res, next) => {
 })      
 //  Note - User.create(req.body) has a security flow . Because if suppose there is field isAdmin and user can pass a field admin: true.
 //Instead use => User.create({name: req.body.name}) like this.
+
+
+exports.protect = catchAsync(async(req, res, next) => {
+    //1 ) Getting the Token and check if its exits.
+    let token;
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        token = req.headers.authorization.split(' ')[1]
+    };
+    console.log(token);
+    if(!token){
+        return next(new AppError('You are not logged in ! Please login to get access!', 401))
+    }
+    //2) Validate the Token (JWT ALgo verifies).
+    //3) Check if the user still exits.
+    //4) Check if user changed password after token was issued.
+    next();
+});
