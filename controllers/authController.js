@@ -1,4 +1,5 @@
 // ALl the func related to authentication will be here.
+const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel') // Import the user model.
 const catchAsync = require('./../utils/catchAsync');
@@ -76,7 +77,15 @@ exports.protect = catchAsync(async(req, res, next) => {
         return next(new AppError('You are not logged in ! Please login to get access!', 401))
     }
     //2) Validate the Token (JWT ALgo verifies).
+    const decoded = await promisify(jwt.verify)(token , process.env.JWT_SECRET) // Pass token and secret.
+    console.log(decoded) // On decoded we will get user.
+    const user = await User.findById(decoded.id)
+    if(!user){
+        return next(new AppError('The User belonging to this User doesnt exist', 401))
+    }
     //3) Check if the user still exits.
+
     //4) Check if user changed password after token was issued.
+    // user.changedPasswordAfter(decoded.iat)
     next();
 });

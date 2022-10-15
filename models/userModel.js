@@ -41,7 +41,8 @@ const userSchema = new mongoose.Schema(
                 }, 
                 message: "Passwords are not save."
             }
-        }
+        }, 
+        passwordChangedAt: Date
     }
 );
 
@@ -61,6 +62,18 @@ userSchema.methods.correctPassword = async function(candidatePassword, userPassw
     // this points to document. this.password is not available due to select false.
     return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+// We do it later.
+// userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+//     // In instance method this always points to current document.
+//     console.log("heyaa", JWTTimestamp)
+//     if(this.passwordChangedAt){
+//         console.log("heyaa", JWTTimestamp)
+//         const changedTimestamp = this.passwordChangedAt.getTime()
+//         console.log(changedTimestamp, JWTTimestamp);
+//     }
+//     return false;
+// }
 
 
 const User = mongoose.model('User', userSchema)
