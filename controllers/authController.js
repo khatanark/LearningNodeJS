@@ -98,6 +98,25 @@ exports.restrictTo = (...roles) => {
         if(!roles.includes(req.user.role)){
             return next(new AppError('You dont have permission to perform this action', 404))
         }
+        // If we are here it means it has permission so we go to next middleware.
         next();
     }
 }
+
+
+exports.forgotPassword = catchAsync( async(req, res, next) => {
+    // 1) Get User based on posted email.
+    const user = await User.findOne({ email: req.body.email});
+    console.log(user);
+    if(!user){
+        return next(new AppError('No user with that email.', 404))
+    }
+    // 2) Generate the random reset token. 
+    const resetToken = user.createPasswordToken();
+    // user.save tries to save all of the data so if trtyig to save only one data will giver error ? so validate false.
+    await user.save({validateBeforeSave: false}); 
+    // 3) send back as an email.
+    next();
+});
+
+// exports.resetPassword = (req, res, next) = {}
