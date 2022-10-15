@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel') // Import the user model.
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/AppError');
+const sendEmail = require('./../utils/email');
 
 // Receives only userId as a paramter.
 const siginToken = id => {
@@ -104,7 +105,7 @@ exports.restrictTo = (...roles) => {
 }
 
 
-exports.forgotPassword = catchAsync( async(req, res, next) => {
+exports.forgotPassword = catchAsync(async(req, res, next) => {
     // 1) Get User based on posted email.
     const user = await User.findOne({ email: req.body.email});
     console.log(user);
@@ -116,7 +117,28 @@ exports.forgotPassword = catchAsync( async(req, res, next) => {
     // user.save tries to save all of the data so if trtyig to save only one data will giver error ? so validate false.
     await user.save({validateBeforeSave: false}); 
     // 3) send back as an email.
-    next();
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}}`;
+    const message = `Forgot your password ? Submit a Patch request with your new password and password Confirm to: ${resetURL}`
+    console.log(message)
+    // try{
+    try{
+        await sendEmail({
+            email: req.body.email, 
+            subject: 'Your password token valid for 10 min', 
+            message
+        });
+
+        res.status(200).json({
+            status: 'Success', 
+            token: 'Token sent to mail'
+        });
+    } catch (err){
+        console.log(err);
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save({validateBeforeSave: false});
+        return next(new AppError('Try again Later', 500))
+    }
 });
 
 // exports.resetPassword = (req, res, next) = {}
