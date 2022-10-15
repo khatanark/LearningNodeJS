@@ -64,7 +64,9 @@ exports.updateApost = (req, res) => {
 } 
 
 exports.deleteATour = catchAsync(async (req, res, next) => {
-        await Tour.findByIDAndDelete(req.params.id);
+        console.log("I am in delete", req.params.id)
+        const tour_id = req.params.id;
+        await Tour.findByIdAndDelete(tour_id);
         res.status(200).json({
             status: 'success',
             message: 'Deleted successfully'

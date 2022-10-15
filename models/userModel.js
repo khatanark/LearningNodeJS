@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema(
             validator: [validator.isEmail, 'Valid Email']
         }, 
         photo: String, 
+        role: {
+            type: String, 
+            enum: ['user', 'guide', 'lead-guide', 'admin'], 
+            default: 'user'
+        },
         password: {
             type: String, 
             required: [true,'A user must have a name.'],
@@ -74,6 +79,8 @@ userSchema.methods.correctPassword = async function(candidatePassword, userPassw
 //     }
 //     return false;
 // }
+
+
 
 
 const User = mongoose.model('User', userSchema)

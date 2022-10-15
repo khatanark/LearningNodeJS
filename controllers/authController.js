@@ -83,9 +83,21 @@ exports.protect = catchAsync(async(req, res, next) => {
     if(!user){
         return next(new AppError('The User belonging to this User doesnt exist', 401))
     }
+    req.user = user // Assign the req param the user.
     //3) Check if the user still exits.
 
     //4) Check if user changed password after token was issued.
     // user.changedPasswordAfter(decoded.iat)
     next();
 });
+
+// How to pass the arguments to the middlewares ? By wrapping 
+exports.restrictTo = (...roles) => {
+    return (req,res, next) => {
+        // roles is an array.
+        if(!roles.includes(req.user.role)){
+            return next(new AppError('You dont have permission to perform this action', 404))
+        }
+        next();
+    }
+}
