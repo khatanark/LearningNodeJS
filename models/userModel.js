@@ -63,7 +63,7 @@ userSchema.pre('save', async function(next){
     this.password = await bcrypt.hash(this.password, 12); // hash is a async func.
     this.passwordConfirm = undefined; // delete the passwordconfirm the field.
     next()
-})
+});
 
 // We will use instance method which will be avilable throughout all the documents of the collections.It is define on userScehma. 
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword){
