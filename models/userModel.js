@@ -50,7 +50,12 @@ const userSchema = new mongoose.Schema(
         }, 
         passwordChangedAt: Date, 
         passwordResetToken: String, 
-        passwordResetExpires: Date
+        passwordResetExpires: Date,
+        active: {   // We dont delete the user, instead we deactivate the account of the user.
+            type: Boolean, 
+            default: true, 
+            select: false
+        }
     }
 );
 
@@ -70,6 +75,14 @@ userSchema.methods.correctPassword = async function(candidatePassword, userPassw
     // this points to document. this.password is not available due to select false.
     return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+// Query middleware . so this keyword points to current query.
+userSchema.pre(/^find/, function(next){
+    this.find({active: {$ne: false}}); // all documents that are not active should show up.
+    next();
+});
+
+
 
 // We do it later.
 // userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {

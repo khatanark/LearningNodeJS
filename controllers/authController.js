@@ -200,5 +200,12 @@ exports.updatePassword =  catchAsync(async (req, res, next) => {
 
 });
 
-
 //Note => We dont use update function and instead use save func anything which is related to password. because the validators doesn;t work with update.
+
+exports.deleteMe = catchAsync(async (req, res, next) =>  {
+    await User.findByIdAndUpdate(req.user.id, {active: false})
+    res.status(204).json({
+        status: 'error', 
+        message: 'This route is not yet defined!'
+    });
+});
