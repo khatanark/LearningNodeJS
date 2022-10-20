@@ -172,6 +172,33 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
             token
         }
     });
+});
 
+exports.updatePassword =  catchAsync(async (req, res, next) => {
+    // Note: Always ask for currentpassword before updating it.
+    // 1) Get user from collections.
+    const user = await User.findById(req.user.id).select('+password');
+    // 2) Check if Posted current password is current.
+    if ( !(await user.correctPassword(req.body.passwordConfirm, user.password) ) ){
+        return next(new AppError('Your password is wrong.', 500));
+    }
+    // 3) if so, update the password.
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm
+    await user.save()
+    
+    // 4) Login user, send JWT.
+    const token = siginToken(user._id)
+
+    res.status(201).json({
+        status: 'Success', 
+        token,
+        data: {
+            token
+        }
+    });
 
 });
+
+
+//Note => We dont use update function and instead use save func anything which is related to password. because the validators doesn;t work with update.
