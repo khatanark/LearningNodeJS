@@ -16,6 +16,10 @@ const siginToken = id => {
 
 const createSendToken = (user, statusCode, res) => {
     const token = siginToken(user._id);
+    res.cookie('jwt', token, {
+        expires: new Date(Date.now() + 90 * 24 * 60 * 1000),
+        httpOnly: true // converting 90 days to miliseconds.
+    });
     res.status(statusCode).json({
         status: 'success', 
         token,
