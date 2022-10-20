@@ -14,6 +14,17 @@ const siginToken = id => {
     });  // Payload (User ID),  Secret
 }
 
+const createSendToken = (user, statusCode, res) => {
+    const token = siginToken(user._id);
+    res.status(statusCode).json({
+        status: 'success', 
+        token,
+        data: {
+            user
+        }
+    });
+};
+
 
 exports.signup = catchAsync(async(req, res, next) => {
     // We allow onlythe data which we want to use.
@@ -23,16 +34,8 @@ exports.signup = catchAsync(async(req, res, next) => {
         password: req.body.password, 
         passwordConfirm: req.body.passwordConfirm
     }); // THis will return a promise so , this must be async func.
- 
+    createSendToken(newUser, 201, res);
     const token = siginToken(newUser._id)
-
-    res.status(201).json({
-        status: 'Success', 
-        token,
-        data: {
-            tour: newUser
-        }
-    });
 });
 
 
@@ -56,13 +59,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3). If everything is OK, send the jwt token.
-
-    const token = siginToken(user._id)
-    res.status(200).json({
-        status: 'Success',
-        user, 
-        token
-    });
+    createSendToken(user, 200, res);
 })      
 //  Note - User.create(req.body) has a security flow . Because if suppose there is field isAdmin and user can pass a field admin: true.
 //Instead use => User.create({name: req.body.name}) like this.
@@ -163,15 +160,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     await user.save();
     //3) Update the changed password property for the current user.
     //4) Log the user in and send JWT.
-    const token = siginToken(user._id)
-
-    res.status(201).json({
-        status: 'Success', 
-        token,
-        data: {
-            token
-        }
-    });
+    createSendToken(user, 201, res);
 });
 
 exports.updatePassword =  catchAsync(async (req, res, next) => {
@@ -188,16 +177,7 @@ exports.updatePassword =  catchAsync(async (req, res, next) => {
     await user.save()
     
     // 4) Login user, send JWT.
-    const token = siginToken(user._id)
-
-    res.status(201).json({
-        status: 'Success', 
-        token,
-        data: {
-            token
-        }
-    });
-
+    createSendToken(user, 201, res);
 });
 
 //Note => We dont use update function and instead use save func anything which is related to password. because the validators doesn;t work with update.
