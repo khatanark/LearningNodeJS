@@ -58,7 +58,34 @@ const tourSchema = new mongoose.Schema(
         secretTour: {
             type: Boolean,
             default: false
-        }
+        },
+        // We have created a object for startLocation , which should have atleast 2 fields. Like here type and coordinates.
+        startLocation: {
+            //Geo Special data.
+            type: {
+                type: String, 
+                default: 'Point', 
+                enum: ['Point'] // Possible options
+            },
+            // we expect no of points. Latitude and longitude.
+            coordinates: [Number] , 
+            address: String, 
+            description: String
+        }, 
+        // Inside array we have objects.
+        locations: [
+            {
+                type: {
+                    type: String, 
+                    default: 'Point', 
+                    enum: ['Point'] 
+                }, 
+                coordinates: [Number], 
+                address: String, 
+                description: String, 
+                day: Number
+            }
+        ]
     } , {
         // We are defing the options to the schema. that is wantto show the virtual fields.
         toJSON: {virtuals: true}, 
