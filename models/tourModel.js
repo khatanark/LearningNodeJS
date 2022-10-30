@@ -85,8 +85,16 @@ const tourSchema = new mongoose.Schema(
                 description: String, 
                 day: Number
             }
+        ],
+        guides: [
+            { 
+                // Referencing.
+                type: mongoose.Schema.ObjectId, 
+                ref: 'User'
+            }
         ]
-    } , {
+    } , 
+    {
         // We are defing the options to the schema. that is wantto show the virtual fields.
         toJSON: {virtuals: true}, 
         toObject: {virtuals: true}
