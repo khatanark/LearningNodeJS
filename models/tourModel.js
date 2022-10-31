@@ -127,6 +127,14 @@ tourSchema.pre('find', function(next){
     next();
 })
 
+// Query middleware , this points to current query.
+tourSchema.pre(/^find/, function(next){
+    this.populate('guides');
+    next();
+});
+
+
+
 
 const Tour = mongoose.model('Tour', tourSchema)
 module.exports = Tour;
