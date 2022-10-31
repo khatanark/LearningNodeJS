@@ -47,7 +47,7 @@ exports.addATour =  catchAsync(async (req, res, next) => {
 
 exports.getATour = catchAsync(async (req, res, next) => {
         // params.id because in routes we are using /:id
-        const tour = await Tour.findById(req.params.id);
+        const tour = await Tour.findById(req.params.id).populate('guides'); // We want to populate the fields which have guildes. 
         res.status(201).json({
             status: 'Success', 
             data: {
