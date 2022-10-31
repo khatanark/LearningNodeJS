@@ -9,6 +9,7 @@ const AppError =  require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
 const tourRouter = require('./routes/tourRoutes')
 const userRouter = require('./routes/userRoutes')
+const reviewRouter = require('./routes/reviewRoutes')
 const app = express();
 // middleware express.json()  It helps to modify the incoming data
 
@@ -21,6 +22,7 @@ const port = 3000;
 
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/reviews', reviewRouter) // This is a middleware. Whenever a request with 'api/v1/reviews is hit, reviewRouter is called. This is called mounting.
 
 //IMPORTANT (Handle unhandle routes.)
 // Order of middleware is important.
