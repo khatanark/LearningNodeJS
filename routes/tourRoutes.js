@@ -2,6 +2,7 @@ const express = require('express')
 const tourController = require('./../controllers/tourController')
 
 const authController = require('./../controllers/authController')
+const reviewController = require('./../controllers/reviewController')
 const router = express.Router()
 
 // This is params middleware. It will be available for specific params , /api/tours/:id
@@ -23,4 +24,18 @@ router
 .patch(tourController.updateApost)
 .delete(authController.protect, authController.restrictTo('admin') ,tourController.deleteATour)
 
+
+router
+.route('/:tourId/reviews')
+.post(authController.protect, reviewController.creatReview)
+
 module.exports = router;
+
+
+
+
+ //NESTED ROUTES 
+  // ex - 27374394 is tour id 
+  // POST /tours/27374394/reviews - to create the reviews of a particular tour.
+  // GET /tours/27374394/reviews - to get the reviews of a particular tour.
+  // GET /tours/27374394/reviews/238853 - to get the particular review of a tour.
