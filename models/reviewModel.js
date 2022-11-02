@@ -37,13 +37,19 @@ const reviewSchema = new mongoose.Schema(
 
   // This will work for all finds.... findone etc.
   reviewSchema.pre(/^find/, function(next) {
-    this.populate({
-        path:'tour', 
-        select: 'name'
-    }).populate({
-        path: 'user', 
-        select: 'name'
-    })
+    // this.populate({
+    //     path:'tour', 
+    //     select: 'name'
+    // }).populate({
+    //     path: 'user', 
+    //     select: 'name'
+    // })
+    this.populate(
+        {
+            path: 'user',
+            select: 'name'
+        }
+    );
     next();
   });
 

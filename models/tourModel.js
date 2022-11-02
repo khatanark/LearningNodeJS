@@ -100,12 +100,24 @@ const tourSchema = new mongoose.Schema(
         toObject: {virtuals: true}
     }
 );
+
+
+// How does the Parent will get to know about the child. Virtual populate.
+tourSchema.virtual('reviews', {
+    ref: 'Review',   // the model to use
+    localField: '_id',  // This the local field Tour id .
+    foreignField: 'tour' // is equal to foreignField. // This is the field name of F.K present in reviews model.
+  });
+
+
+
 // Virtauls fields are those which are derived and are not saved in the database. 
 // We will define the tour propety on the schema , we have not used arrow func because it doesn't have its own this.
 tourSchema.virtual('durationWeeks').get(function(){
     // this will be poining to tour documents.
     return this.duration/7;
 });
+
 
 //DOCUMENT MIDDLEWARES.
 tourSchema.pre('save', function(next){
