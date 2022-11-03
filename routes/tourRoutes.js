@@ -33,7 +33,7 @@ router
 router
 .route('/:id')
 .get(tourController.getATour)
-.patch(tourController.updateApost)
+.patch(tourController.updateTour)
 .delete(authController.protect, authController.restrictTo('admin') ,tourController.deleteATour)
 
 // Method 1 => of nested routes. 

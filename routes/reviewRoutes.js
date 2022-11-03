@@ -7,9 +7,11 @@ const router = express.Router({ mergeParams: true }); // why merge paramsters ? 
 router
     .route('/')
     .get(authController.protect, reviewController.getAllReviews)
-    .post(authController.protect, reviewController.creatReview);
+    .post(authController.protect, reviewController.setTourUserIds, reviewController.creatReview);
 
 router
-    .route('/:id').delete(reviewController.deleteReview);
+    .route('/:id')
+    .delete(reviewController.deleteReview)
+    .patch(reviewController.updateReview)
 
 module.exports = router;

@@ -19,10 +19,6 @@ exports.getAUser = (req, res) => {
         message: 'All users'
     });
 } 
-exports.updateAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
+// Dont update passwords with this.
+exports.updateAUser = factory.updateOne(User);
 exports.deleteAUser = factory.deleteOne(User);

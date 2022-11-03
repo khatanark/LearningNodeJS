@@ -32,20 +32,6 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
         });
 });
 
-
-
-
-exports.addATour =  catchAsync(async (req, res, next) => {
-    //Important => Tour.create method will return a promise. We will wait for that promise using async await.And using Async wait we need to test for error using try catch
-    const newTour = await Tour.create(req.body)
-    res.status(201).json({
-        status: 'Success', 
-        data: {
-            tour: newTour
-        }
-    });
-});
-
 exports.getATour = catchAsync(async (req, res, next) => {
         // params.id because in routes we are using /:id
         const tour = await Tour.findById(req.params.id).populate('reviews')
@@ -57,13 +43,8 @@ exports.getATour = catchAsync(async (req, res, next) => {
         });
 })
 
-exports.updateApost = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'Tour updated'
-    })
-} 
-
+exports.addATour = factory.createOne(Tour);
+exports.updateTour = factory.updateOne(Tour);
 exports.deleteATour = factory.deleteOne(Tour);
 
 exports.getTourStats = catchAsync(async(req, res, next) => {
