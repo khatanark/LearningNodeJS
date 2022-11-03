@@ -1,6 +1,7 @@
 const User = require('./../models/userModel') // Import the user model.
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/AppError');
+const factory = require('./handlerFactory');
 
 exports.getAllUsers = catchAsync(async(req, res, next) => {
     const users = await User.find();
@@ -24,9 +25,4 @@ exports.updateAUser = (req, res) => {
         message: 'All users'
     });
 } 
-exports.deleteAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
+exports.deleteAUser = factory.deleteOne(User);

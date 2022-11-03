@@ -1,6 +1,7 @@
 const Tour = require('./../models/tourModel')
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
+const factory = require('./handlerFactory');
 console.log(APIFeatures);
 
 exports.aliasTopTours = async(req, res, next) => {
@@ -63,16 +64,7 @@ exports.updateApost = (req, res) => {
     })
 } 
 
-exports.deleteATour = catchAsync(async (req, res, next) => {
-        console.log("I am in delete", req.params.id)
-        const tour_id = req.params.id;
-        await Tour.findByIdAndDelete(tour_id);
-        res.status(200).json({
-            status: 'success',
-            message: 'Deleted successfully'
-        })
-})
-
+exports.deleteATour = factory.deleteOne(Tour);
 
 exports.getTourStats = catchAsync(async(req, res, next) => {
         // We will pass the stages in the aggregate, and we will use stages one by one.
