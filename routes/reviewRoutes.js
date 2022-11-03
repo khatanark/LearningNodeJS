@@ -2,7 +2,7 @@ const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const authController = require('./../controllers/authController');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true }); // why merge paramsters ? router.use('/:tourId/reviews', reviewRouter); we are passing the tourId, to get tour id , we merge params.
 
 router
     .route('/')
