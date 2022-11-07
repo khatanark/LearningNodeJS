@@ -7,12 +7,17 @@ const router = express.Router()
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
-
-router.get('/me', authController.protect, userController.getMe, userController.getAUser)
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
-router.patch('/updateMyPassowrd', authController.protect, authController.updatePassword)
-router.delete('/deleteMe',authController.protect, authController.deleteMe)
+
+
+// ALl the below ones require authentication. so instead of writing the protect middleware in all, we can directrly specificy router.use below this point.
+//Protect all the routes after this middleware.
+router.use(authController.protect)
+
+router.get('/me', userController.getMe, userController.getAUser)
+router.patch('/updateMyPassowrd',  authController.updatePassword)
+router.delete('/deleteMe', authController.deleteMe)
 
 router
 .route('/')

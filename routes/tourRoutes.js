@@ -27,8 +27,8 @@ router.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.ge
 
 router
 .route('/')
-.get(authController.protect, tourController.getAllTours) // First wil run auth middleware then getalltours
-.post(tourController.addATour) // Chaining a param middleware. 
+.get(tourController.getAllTours) // First wil run auth middleware then getalltours
+.post(authController.protect, authController.restrictTo('admin'), tourController.addATour) // Chaining a param middleware. 
 
 router
 .route('/:id')
