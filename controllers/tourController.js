@@ -1,8 +1,6 @@
 const Tour = require('./../models/tourModel')
-const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
-console.log(APIFeatures);
 
 exports.aliasTopTours = async(req, res, next) => {
     req.query.limit = 5;
@@ -11,38 +9,8 @@ exports.aliasTopTours = async(req, res, next) => {
     next();
 };
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-
-        // Execute the query
-        // Passing query object.
-        // Chaining always work because we are return this after each function
-        const features = new APIFeatures(Tour.find(), req.query)
-        // .filter()
-        .sort()
-        .paginate()
-        .limitFields();
-        const tours = await features.query; // we have changed await from this await Tour.find(req.query) , so that we can apply other operations on query.
-
-        // Send Response.
-        res.status(201).json({
-            status: 'Success', 
-            data: {
-                tour: tours
-            }
-        });
-});
-
-exports.getATour = catchAsync(async (req, res, next) => {
-        // params.id because in routes we are using /:id
-        const tour = await Tour.findById(req.params.id).populate('reviews')
-        res.status(201).json({
-            status: 'Success', 
-            data: {
-                tour: tour
-            }
-        });
-})
-
+exports.getAllTours = factory.getAll(Tour)
+exports.getATour = factory.getOne(Tour, {path: 'reviews'});
 exports.addATour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
 exports.deleteATour = factory.deleteOne(Tour);

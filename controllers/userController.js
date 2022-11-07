@@ -13,12 +13,7 @@ exports.getAllUsers = catchAsync(async(req, res, next) => {
     });
 })
 
-exports.getAUser = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'All users'
-    });
-} 
+exports.getAUser = factory.getOne(User);
 // Dont update passwords with this.
 exports.updateAUser = factory.updateOne(User);
 exports.deleteAUser = factory.deleteOne(User);

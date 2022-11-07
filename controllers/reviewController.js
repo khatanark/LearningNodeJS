@@ -23,6 +23,8 @@ exports.setTourUserIds =  catchAsync(async(req, res, next) => {
     next();
 });
 
+
+exports.getReview = factory.getOne(Review);
 exports.creatReview = factory.createOne(Review);
 exports.updateReview = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review); // pass the review

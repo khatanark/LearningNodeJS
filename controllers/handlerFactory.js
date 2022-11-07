@@ -1,5 +1,6 @@
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const APIFeatures = require('./../utils/apiFeatures');
 
 //Note: The goal is to create a function which returns another function.
 // The goal is to create functions such that we justdont need to create new functions again and again. as delete a review or delete a tour both does the same work so just , tht is delete the only difference is model name.
@@ -57,3 +58,45 @@ exports.createOne = Model => catchAsync(async (req, res, next) => {
         }
     });
 })
+
+
+exports.getOne = (Model, populateOptions) => catchAsync(async (req, res, next) => {
+    // params.id because in routes we are using /:id
+    let query = Model.findById(req.params.id)
+    if(populateOptions) query = query.populate(populateOptions);
+
+    const doc = await query
+
+    if(!doc) {
+        return next(new AppError('No document found with that ID', 404));
+    }
+
+    res.status(201).json({
+        status: 'Success', 
+        data: {
+            data: doc
+        }
+    });
+});
+
+
+exports.getAll = Model => catchAsync(async (req, res, next) => {
+
+    // Execute the query
+    // Passing query object.
+    // Chaining always work because we are return this after each function
+    const features = new APIFeatures(Model.find(), req.query)
+    // .filter()
+    .sort()
+    .paginate()
+    .limitFields();
+    const doc = await features.query; // we have changed await from this await Tour.find(req.query) , so that we can apply other operations on query.
+
+    // Send Response.
+    res.status(201).json({
+        status: 'Success', 
+        data: {
+            data: doc
+        }
+    });
+});
