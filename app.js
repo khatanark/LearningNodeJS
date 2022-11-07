@@ -1,9 +1,6 @@
 const fs = require('fs');
+const path = require('path')
 const express = require('express');
-
-// if (process.env.NODE_ENV === 'developement'){
-//     app.use(morgan('dev'))
-// }
 const morgan = require('morgan'); // Logging middleware . 3rd party middleware.
 const AppError =  require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
@@ -13,12 +10,21 @@ const reviewRouter = require('./routes/reviewRoutes')
 const app = express();
 // middleware express.json()  It helps to modify the incoming data
 
+// Tell the app which view engine to use.
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'))// Tell where are views localted.
+
+
 // 1) MIDDLEWARES 
 app.use(morgan('dev'))  
 app.use(express.json()); 
 app.use(express.static(`${__dirname}/public`))
 
 const port = 3000;
+
+app.get('/', (req, res) => {
+    res.status(200).render('base');
+})
 
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
