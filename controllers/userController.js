@@ -13,6 +13,14 @@ exports.getAllUsers = catchAsync(async(req, res, next) => {
     });
 })
 
+exports.getMe = (req, res, next) => {
+    // We want to use the function getOne but there is a slide change , onstead of params.id we want current user, 
+    // so we are defining the param id in a middleware. before calling getOne.
+    console.log(req.user)
+    req.params.id = req.user.id;
+    next();
+}
+
 exports.getAUser = factory.getOne(User);
 // Dont update passwords with this.
 exports.updateAUser = factory.updateOne(User);
